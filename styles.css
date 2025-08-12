@@ -1,0 +1,491 @@
+:root {
+  --bg-1: #0b0610;
+  --bg-2: #120925;
+  --accent: #7c4dff;
+  --muted: #a3a3b3;
+  --card: rgba(255, 255, 255, 0.05);
+  --panel-bg: #171717;
+  --text-light: #eaeaf2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  color: var(--text-light);
+  display: flex;
+  height: 100vh;
+  overflow: hidden; /* Prevents scrollbars on the body */
+}
+
+.info-pannel {
+  width: 300px;
+  height: 100%;
+  background-color: var(--panel-bg);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-shrink: 0; /* Prevents the panel from shrinking on smaller viewports */
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain; /* Prevents the image from being distorted */
+  flex-shrink: 0;
+}
+
+.info-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.new-chat-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(124, 77, 255, 0.18),
+    rgba(92, 39, 201, 0.14)
+  );
+  color: #fff;
+  border: 1px solid rgba(124, 77, 255, 0.35);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.22s, box-shadow 0.22s;
+  text-align: center;
+}
+
+.new-chat-btn:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(124, 77, 255, 0.2);
+}
+
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto; /* Allow scrolling if many chats */
+  flex-grow: 1; /* Takes up available space */
+}
+
+.history-section li {
+  position: relative;
+}
+
+.delete-chat-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 6px 8px;
+  font-size: 1.2rem;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.history-section li:hover .delete-chat-btn {
+  opacity: 1;
+}
+.delete-chat-btn:hover {
+  color: #ff5252; /* A reddish color for delete */
+  transform: translateY(-50%) scale(1.1);
+}
+
+.history-section h4 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.history-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-section li a {
+  display: block;
+  padding: 10px 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.history-section li a:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+.history-section li.active-chat a {
+  background-color: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+/* New Styles for Chat Interface */
+.chat-interface {
+  flex-grow: 1; /* Takes up the remaining space */
+  display: flex;
+  flex-direction: column;
+  /* Add padding to contain the input area and give it space from the edges */
+  padding: 24px;
+  /* This ensures the layout doesn't break on smaller viewports */
+  max-height: 100vh;
+}
+
+.chat-window {
+  flex-grow: 1; /* This makes the chat window fill the available space */
+  overflow-y: auto; /* Allows scrolling for messages */
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Prevents the chat window from overflowing its container */
+}
+
+/* Styles for Chat Messages */
+.chat-message {
+  display: flex;
+  margin-bottom: 20px;
+  max-width: 90%; /* Messages shouldn't span the entire width */
+  align-items: flex-start; /* Align avatar and bubble */
+  gap: 12px;
+}
+
+.chat-message.has-code {
+  /* Give messages with code blocks more horizontal space */
+  max-width: 100%;
+}
+
+.message-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.message-bubble {
+  padding: 14px 18px;
+  border-radius: 20px;
+  line-height: 1.5;
+  font-size: 1rem;
+  flex-grow: 1; /* Allow the bubble to grow and fill available space */
+  min-width: 0; /* A crucial property to allow flex items to shrink below their content size */
+}
+
+.message-bubble p {
+  margin: 0; /* Reset default paragraph margin */
+}
+
+/* User-specific message styles */
+.user-message {
+  align-self: flex-end; /* Aligns the message container to the right */
+}
+.user-message .message-bubble {
+  background-color: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 5px; /* Creates the "speech bubble" tail effect */
+  flex-grow: 0; /* Override the default so user bubbles only wrap their content */
+}
+
+.user-message .file-extract-bubble {
+  background-color: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 5px;
+  padding: 14px 18px;
+  border-radius: 20px;
+}
+
+.file-extract-bubble hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 8px 0;
+}
+
+/* AI-specific message styles */
+.ai-message {
+  align-self: flex-start; /* Aligns the message container to the left */
+}
+.ai-message .message-bubble {
+  background-color: #2b2b2b; /* A dark grey, distinct from user's */
+  border-bottom-left-radius: 5px; /* Creates the "speech bubble" tail effect */
+  flex-grow: 0; /* Override the default so AI bubbles only wrap their content */
+}
+
+/* Styles for the Terminal Window inside a message */
+.terminal-window {
+  background-color: #0d1117; /* A dark, terminal-like background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin: 12px 0;
+  overflow: hidden; /* Ensures child elements conform to border-radius */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease;
+  width: 100%;
+}
+
+.terminal-window:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 25px rgba(124, 77, 255, 0.2);
+}
+
+.terminal-header {
+  background-color: #161b22;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.copy-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-light);
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.copy-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.terminal-body pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  text-align: left; /* Ensures code is always left-aligned */
+}
+
+.terminal-body code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+}
+
+/* Style for the editable code block on focus */
+.terminal-body code[contenteditable="true"]:focus {
+  outline: 1px solid var(--accent);
+  box-shadow: 0 0 8px rgba(124, 77, 255, 0.5);
+  background-color: rgba(124, 77, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Add bubble style specifically for the typing indicator */
+.ai-message .typing-bubble {
+  background-color: #2b2b2b;
+  padding: 14px 18px;
+  border-radius: 20px;
+  border-bottom-left-radius: 5px;
+  display: inline-block; /* To make it wrap the content */
+}
+
+.ai-message .thinking-text {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.ai-message .typing-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.ai-message .typing-dots span {
+  width: 9px;
+  height: 9px;
+  background-color: var(--muted);
+  border-radius: 50%;
+  animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.ai-message .typing-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.ai-message .typing-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
+
+/* The user input area at the bottom */
+.input-area {
+  flex-shrink: 0; /* Prevents the input area from shrinking */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.main-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-end; /* Aligns buttons to the bottom as textarea grows */
+  gap: 8px;
+  background-color: #2b2b2b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: border-color 0.2s ease;
+}
+
+/* Highlight the whole input box when textarea is focused */
+.main-input-wrapper:focus-within {
+  border-color: var(--accent);
+}
+
+.main-input-wrapper:hover {
+  /* A subtle highlight on hover, less prominent than focus */
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.msg-input {
+  flex-grow: 1;
+  background-color: transparent;
+  border: none;
+  padding: 8px 0; /* Vertical padding to align with icon buttons */
+  color: var(--text-light);
+  font-family: "Roboto", sans-serif;
+  font-size: 1.05rem; /* Slightly larger font */
+  resize: none; /* Disables manual resizing by the user */
+  line-height: 1.5;
+  outline: none;
+}
+
+.msg-input::placeholder {
+  color: var(--muted);
+}
+
+.send-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center; /* Vertically center the icon inside the button */
+  justify-content: center; /* Horizontally center the icon */
+}
+
+.send-btn svg {
+  width: 28px; /* A stylish, larger paper plane */
+  height: 28px;
+}
+
+.send-btn:hover {
+  color: var(--accent);
+  transform: scale(1.1);
+}
+
+.attachment-buttons {
+  display: flex;
+  align-items: flex-end; /* Align icons to the bottom with the textarea */
+  gap: 4px;
+}
+
+/* New style for the attachment icon buttons */
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: var(--accent);
+  transform: scale(1.1);
+}
+
+/* New style for the temporary container used for the typewriter effect */
+.message-bubble .typing-container {
+  font-family: inherit; /* Inherit Roboto font from the parent */
+  font-size: 1rem;      /* Match the final paragraph font size */
+  line-height: 1.5;   /* Match the final paragraph line height */
+  white-space: pre-wrap; /* Respect newlines and wrap text */
+  word-wrap: break-word; /* Break long words */
+  margin: 0;            /* Reset any default margin on the <pre> tag */
+}
+
+.icon-btn:disabled,
+.send-btn:disabled {
+  cursor: not-allowed;
+  color: #555;
+}
+
+.icon-btn:disabled:hover,
+.send-btn:disabled:hover {
+  transform: none;
+  color: #555;
+}
+
+.file-preview {
+  background-color: #3a3a3a;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  align-self: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.remove-file-btn {
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 1.1rem;
+  transition: background-color 0.2s ease;
+}
+
+.remove-file-btn:hover {
+  background-color: #ff5252;
+}
